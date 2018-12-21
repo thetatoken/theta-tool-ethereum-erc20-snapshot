@@ -10,4 +10,5 @@ python run.py <ethereum_rpc_url> <smart_contract_address> <start_height> <end_he
 
 ### Examples
 python run.py https://mainnet.infura.io 0x3883f5e181fccaf8410fa61e12b59bad963fb645 5728491 5728891
+
 python run.py http://localhost:8545 0x3883f5e181fccaf8410fa61e12b59bad963fb645 5728491 5728991

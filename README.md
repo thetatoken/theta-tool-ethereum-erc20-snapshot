@@ -2,6 +2,7 @@ A tool to export the snapshot of an ERC20 token at the given height.
 
 ### Setup
 install the `curl` command line tool
+
 pip install requests
 
 ### Usage

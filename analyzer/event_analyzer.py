@@ -86,7 +86,7 @@ class EthereumEventAnalyzer:
 
   def exportBalance(self, balance_map, balance_file_path):
     with open(balance_file_path, 'w') as balance_file:
-      json.dump(balance_map, balance_file)
+      json.dump(balance_map, balance_file, indent=4)
   
   def extractAddressFromTopic(self, topic):
     addr = '0x' + topic[26:]

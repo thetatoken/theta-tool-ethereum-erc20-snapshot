@@ -3,11 +3,12 @@ import json
 from exporter.rpc import EthereumRpcService
 from os import listdir
 from os.path import isfile, join
+from common.utils import Logger
 
 
 class EthereumEventExporter:
   
-  HEIGHT_STEP = 100
+  HEIGHT_STEP = 10000
   FILENAME_FORMAT = '%s_events_%s_to_%s.txt'
   FILENAME_REGEX = '(?P<smaddr>[a-fx0-9]+)_events_(?P<from>[0-9]+)_to_(?P<to>[0-9]+)\.txt'
 
@@ -17,10 +18,12 @@ class EthereumEventExporter:
     self.export_folder = export_folder
 
   def Export(self, start_height, end_height):
-    print("Start to export events from height %s to %s..."%(start_height, end_height))
+    Logger.printInfo("Start to export events from height %s to %s..."%(start_height, end_height))
     current_height = self.getProcessedHeight()
     if current_height >= start_height:
-      print("Already exported up to height %s. Continue from height %s..."%(current_height, current_height+1))
+      Logger.printInfo("Already exported up to height %s"%(current_height))
+      if current_height < end_height:
+        Logger.printInfo("Continue from height %s..."%(current_height+1))
     else:
       current_height = start_height - 1
     while current_height < end_height:
@@ -28,7 +31,7 @@ class EthereumEventExporter:
       to_height = min(from_height + EthereumEventExporter.HEIGHT_STEP - 1, end_height)
       self.export(from_height, to_height)
       current_height = to_height
-      print("Exported events from height %s to %s"%(from_height, to_height))
+      Logger.printInfo("Exported events from height %s to %s"%(from_height, to_height))
 
   # export the events from from_height to to_height (both inclusive)
   def export(self, from_height, to_height):

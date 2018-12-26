@@ -21,6 +21,9 @@ class ApiKey:
   TO_BLOCK   = 'toBlock'
   ADDRESS    = 'address'
 
+  TOPICS     = 'topics'
+  DATA       = 'data'
+
 
 class ApiValue:
   ETH_GETLOGS = 'eth_getLogs'

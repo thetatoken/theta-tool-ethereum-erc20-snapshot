@@ -25,6 +25,7 @@ class EthereumEventAnalyzer:
       if match_res:
         file_path = event_file_folder + '/' + filename
         self.analyzeFile(file_path, balance_map)
+    balance_map = self.filterOutAddressesWithZeroBalance(balance_map)
     self.exportBalance(balance_map, balance_file_path)
 
   def analyzeFile(self, file_path, balance_map):
@@ -86,7 +87,7 @@ class EthereumEventAnalyzer:
 
   def exportBalance(self, balance_map, balance_file_path):
     with open(balance_file_path, 'w') as balance_file:
-      json.dump(balance_map, balance_file, indent=4)
+      json.dump(balance_map, balance_file, indent=2)
   
   def extractAddressFromTopic(self, topic):
     addr = '0x' + topic[26:]
@@ -96,3 +97,9 @@ class EthereumEventAnalyzer:
     amount = int(data, 16)
     return amount
 
+  def filterOutAddressesWithZeroBalance(self, balance_map):
+    filtered_balance_map = {}
+    for (addr, bal) in balance_map.iteritems():
+      if bal != 0:
+        filtered_balance_map[addr] = bal
+    return filtered_balance_map

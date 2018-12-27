@@ -4,7 +4,7 @@ from os import listdir
 from os.path import isfile
 from common.constants import ApiKey
 from common.utils import Logger
-from exporter.event_exporter import EthereumEventExporter
+from extractor.event_extractor import EthereumEventExtractor
 
 
 class EthereumEventAnalyzer:
@@ -18,7 +18,7 @@ class EthereumEventAnalyzer:
 
   def Analyze(self, event_file_folder, balance_file_path):
     balance_map = {}
-    event_file_regex = re.compile(EthereumEventExporter.FILENAME_REGEX)
+    event_file_regex = re.compile(EthereumEventExtractor.FILENAME_REGEX)
     filenames = [f for f in listdir(event_file_folder) if event_file_regex.search(f)]
     for filename in filenames:
       match_res = event_file_regex.match(filename)
@@ -26,6 +26,7 @@ class EthereumEventAnalyzer:
         file_path = event_file_folder + '/' + filename
         self.analyzeFile(file_path, balance_map)
     balance_map = self.filterOutAddressesWithZeroBalance(balance_map)
+    balance_map = self.convertBalanceToString(balance_map)
     self.exportBalance(balance_map, balance_file_path)
 
   def analyzeFile(self, file_path, balance_map):
@@ -103,3 +104,10 @@ class EthereumEventAnalyzer:
       if bal != 0:
         filtered_balance_map[addr] = bal
     return filtered_balance_map
+
+  def convertBalanceToString(self, balance_map):
+    converted_balance_map = {}
+    for (addr, bal) in balance_map.iteritems():
+      converted_balance_map[addr] = str(bal)
+    return converted_balance_map
+

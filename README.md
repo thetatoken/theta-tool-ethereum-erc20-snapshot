@@ -1,4 +1,4 @@
-A tool to export the snapshot of an ERC20 token at the given height.
+A tool to export the snapshot of an ERC20 token at the target height.
 
 ### Setup
 
@@ -10,8 +10,10 @@ pip install requests
 
 ### Usage
 
+Use the following command to extract the balance of all the ERC20 token holders. Here `genesis_height` is the height (i.e. block number) of the genesis transaction of the ERC20smart contract. `target_height` is the height to export the snapshot. The result will be written into the file specified by `balance_file_path`.
+
 ```
-python run.py <ethereum_rpc_url> <smart_contract_address> <start_height> <end_height> <balance_file_path>
+python run.py <ethereum_rpc_url> <smart_contract_address> <genesis_height> <target_height> <balance_file_path>
 ```
 
 ### Examples

@@ -1,7 +1,7 @@
 import os
 import sys
 from common.utils import Logger
-from exporter.event_exporter import EthereumEventExporter
+from extractor.event_extractor import EthereumEventExtractor
 from analyzer.event_analyzer import EthereumEventAnalyzer
 
 # Example: python run.py https://mainnet.infura.io 0x3883f5e181fccaf8410fa61e12b59bad963fb645 4728491 6958428 balance.json
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
   Logger.printInfo('')
   Logger.printInfo('Start exporting Ethereum events...')
-  eee = EthereumEventExporter(ethereum_rpc_url, smart_contract_address, export_folder)
+  eee = EthereumEventExtractor(ethereum_rpc_url, smart_contract_address, export_folder)
   eee.Export(start_height, end_height)
   Logger.printInfo('Ethereum events exported.')
   Logger.printInfo('')
@@ -32,7 +32,7 @@ if __name__ == '__main__':
   Logger.printInfo('Start calculating token balances...')
   eea = EthereumEventAnalyzer()
   eea.Analyze(export_folder, balance_file_path)
-  Logger.printInfo('Token balances calculated and exported.')
+  Logger.printInfo('Token balances calculated and exported to: %s'%(balance_file_path))
   Logger.printInfo('')
 
 

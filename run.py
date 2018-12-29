@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from common.utils import Logger
 from common.config_manager import ConfigManager
 from extractor.event_extractor import EthereumEventExtractor
@@ -62,6 +63,8 @@ def sanityChecks(analyzed_balance_map, queried_balance_map, expected_total_suppl
       return False
     total_supply += int(queried_balance)
 
+  Logger.printInfo('Expected total supply  : %s'%(expected_total_supply))
+  Logger.printInfo('Sum of queried balances: %s'%(total_supply))
   if total_supply != expected_total_supply:
     Logger.printError('Token total supply mismatch. expected = %s, calculated = %s'%(expected_total_supply, total_supply))
     return False

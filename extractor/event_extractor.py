@@ -39,7 +39,7 @@ class EthereumEventExtractor:
     event_file_name = EthereumEventExtractor.FILENAME_FORMAT%(self.smart_contract_address, from_height, to_height)
     event_file_path = self.export_folder + '/' + event_file_name
     with open(event_file_path, 'w') as event_file:
-      json.dump(query_results.body, event_file)
+      json.dump(query_results.body, event_file, indent=2)
 
   def getProcessedHeight(self):
     current_height = 0

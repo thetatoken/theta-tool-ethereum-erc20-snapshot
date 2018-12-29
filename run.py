@@ -26,8 +26,8 @@ def exportTokenBalance(ethereum_rpc_url, smart_contract_address, expected_total_
   Logger.printInfo('Token holders extracted.')
   Logger.printInfo('')
   
-  with open(balance_file_path + '.analyzed', 'w') as balance_file:
-    json.dump(analyzed_balance_map, balance_file, indent=2)
+  #with open(balance_file_path + '.analyzed', 'w') as balance_file:
+  #  json.dump(analyzed_balance_map, balance_file, indent=2)
  
   Logger.printInfo('Start querying the balance of each holder at block height %s, may take a while...'%(target_height))
   token_holder_addresses = analyzed_balance_map.keys()
@@ -36,8 +36,8 @@ def exportTokenBalance(ethereum_rpc_url, smart_contract_address, expected_total_
   Logger.printInfo('Token holders balance retrieved.')
   Logger.printInfo('')
 
-  with open(balance_file_path + '.queried', 'w') as balance_file:
-    json.dump(queried_balance_map, balance_file, indent=2)
+  #with open(balance_file_path + '.queried', 'w') as balance_file:
+  #  json.dump(queried_balance_map, balance_file, indent=2)
 
   Logger.printInfo('Start sanity checks...')
   if not sanityChecks(analyzed_balance_map, queried_balance_map, expected_total_supply):

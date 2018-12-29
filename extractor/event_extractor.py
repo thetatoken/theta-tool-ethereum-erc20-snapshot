@@ -9,8 +9,8 @@ from common.utils import Logger
 class EthereumEventExtractor:
   
   HEIGHT_STEP = 10000
-  FILENAME_FORMAT = '%s_events_%s_to_%s.txt'
-  FILENAME_REGEX = '(?P<smaddr>[a-fx0-9]+)_events_(?P<from>[0-9]+)_to_(?P<to>[0-9]+)\.txt'
+  FILENAME_FORMAT = '%s_events_%s_to_%s.json'
+  FILENAME_REGEX = '(?P<smaddr>[a-fx0-9]+)_events_(?P<from>[0-9]+)_to_(?P<to>[0-9]+)\.json'
 
   def __init__(self, ethereum_rpc_url, smart_contract_address, export_folder):
     self.ethereum_rpc_service = EthereumRpcService(ethereum_rpc_url, smart_contract_address)

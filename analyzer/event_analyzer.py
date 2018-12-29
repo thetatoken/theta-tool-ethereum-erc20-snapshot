@@ -19,7 +19,7 @@ class EthereumEventAnalyzer:
   def Analyze(self, event_file_folder, target_height):
     balance_map = {}
     event_file_regex = re.compile(EthereumEventExtractor.FILENAME_REGEX)
-    filenames = [f for f in listdir(event_file_folder) if event_file_regex.search(f)]
+    filenames = sorted([f for f in listdir(event_file_folder) if event_file_regex.search(f)])
     for filename in filenames:
       match_res = event_file_regex.match(filename)
       if match_res:

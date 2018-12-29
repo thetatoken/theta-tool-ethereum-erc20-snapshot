@@ -23,7 +23,7 @@ Here is an example of the config file `config.json`. The fields are self-explana
 {
   "ethereum_rpc_url" : "http://localhost:8545",
   "smart_contract_address" : "0x3883f5e181fccaf8410fa61e12b59bad963fb645",
-  "genesis_height" : 4728491
+  "genesis_height" : 4728491,
   "expected_total_supply" : 1000000000000000000000000000
 }
 ```

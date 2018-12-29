@@ -49,7 +49,6 @@ class EthereumEventAnalyzer:
         continue
 
       from_balance = balance_map.get(from_addr, 0)
-      to_balance = balance_map.get(to_addr, 0)
       if (from_balance < amount) and (not(from_addr == EthereumEventAnalyzer.ZERO_ADDR)):
         Logger.printError('from_balance < amount. from_addr: %s, to_addr: %s, amount: %s, event: %s'%(\
           from_addr, to_addr, amount, event_json))
@@ -59,8 +58,10 @@ class EthereumEventAnalyzer:
         updated_from_balance = from_balance # minting token
       else:
         updated_from_balance = from_balance - amount
-      updated_to_balance = to_balance + amount
       balance_map[from_addr] = updated_from_balance
+
+      to_balance = balance_map.get(to_addr, 0)
+      updated_to_balance = to_balance + amount
       balance_map[to_addr] = updated_to_balance
 
   def getBlockHeight(self, event_json):

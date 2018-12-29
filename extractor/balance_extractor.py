@@ -8,7 +8,8 @@ class TokenBalanceExtractor:
     self.smart_contract_address = smart_contract_address
 
   def Query(self, addresses, target_height):
-    Logger.printInfo("Total number of addresses: %s"%(len(addresses)))
+    num_addresses = len(addresses)
+    Logger.printInfo("Total number of addresses: %s"%(num_addresses))
     queried_balance_map = {}
     num_addresses_queried = 0
     for address in addresses:
@@ -20,7 +21,8 @@ class TokenBalanceExtractor:
       balance_str = str(balance)
       queried_balance_map[address] = balance_str
       num_addresses_queried += 1
-      if num_addresses_queried % 100 == 0:
+      if num_addresses_queried % 1000 == 0:
         Logger.printInfo("%s addresses queried."%(num_addresses_queried))
+    Logger.printInfo("%s addresses queried."%(num_addresses_queried))
     return queried_balance_map
 

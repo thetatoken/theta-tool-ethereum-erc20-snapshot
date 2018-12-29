@@ -25,15 +25,22 @@ def exportTokenBalance(ethereum_rpc_url, smart_contract_address, expected_total_
   Logger.printInfo('Token holders extracted.')
   Logger.printInfo('')
   
-  Logger.printInfo('Start querying the balance of each holder, may take a while...')
+  with open(balance_file_path + '.analyzed', 'w') as balance_file:
+    json.dump(analyzed_balance_map, balance_file, indent=2)
+ 
+  Logger.printInfo('Start querying the balance of each holder at block height %s, may take a while...'%(target_height))
   token_holder_addresses = analyzed_balance_map.keys()
   tbe = TokenBalanceExtractor(ethereum_rpc_url, smart_contract_address)
   queried_balance_map = tbe.Query(token_holder_addresses, target_height)
   Logger.printInfo('Token holders balance retrieved.')
   Logger.printInfo('')
 
+  with open(balance_file_path + '.queried', 'w') as balance_file:
+    json.dump(queried_balance_map, balance_file, indent=2)
+
   Logger.printInfo('Start sanity checks...')
   if not sanityChecks(analyzed_balance_map, queried_balance_map, expected_total_supply):
+    Logger.printError('Sanity checks failed.')
     exit(1)
   Logger.printInfo('Sanity checks all passed.')
   Logger.printInfo('')
@@ -50,14 +57,14 @@ def sanityChecks(analyzed_balance_map, queried_balance_map, expected_total_suppl
     analyzed_balance = analyzed_balance_map[address]
     queried_balance = queried_balance_map.get(address, -1)
     if (analyzed_balance != queried_balance) or (queried_balance == -1):
-      Logger.printError("Invalid balance for address: %s, analyzed_balance = %s, queried_balance = %s"%(
+      Logger.printError("Balance mismatch for address: %s, analyzed_balance = %s, queried_balance = %s"%(
         address, analyzed_balance, queried_balance))
-      exit(1)
+      return False
     total_supply += int(queried_balance)
 
   if total_supply != expected_total_supply:
     Logger.printError('Token total supply mismatch. expected = %s, calculated = %s'%(expected_total_supply, total_supply))
-    exit(1)
+    return False
 
   return True
 

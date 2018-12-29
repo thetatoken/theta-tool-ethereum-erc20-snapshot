@@ -10,21 +10,27 @@ pip install requests
 
 ### Usage
 
-Use the following command to extract the balance of all the ERC20 token holders. Here `genesis_height` is the height (i.e. block number) of the genesis transaction of the ERC20smart contract. `target_height` is the height to export the snapshot. The result will be written into the file specified by `balance_file_path`.
+Use the following command to extract the balance of all the ERC20 token holders. `config_file_path` points to the config file (see examples below). `target_height` is the height to export the snapshot. The result will be written into the file specified by `balance_file_path`.
 
 ```
-python run.py <ethereum_rpc_url> <smart_contract_address> <genesis_height> <target_height> <balance_file_path>
+python run.py <config_file_path> <target_height> <balance_file_path>
 ```
 
 ### Examples
 
-On any machine, run the following command to extract the balance of all the Theta ERC20 token holders at block height 6958428.
+Here is an example of the config file `config.json`. The fields are self-explanatory. For example, `genesis_height` is the height (i.e. block number) of the block that contains the genesis transaction of the ERC20 smart contract. 
 ```
-python run.py https://mainnet.infura.io 0x3883f5e181fccaf8410fa61e12b59bad963fb645 4728491 6958428 balance.json
+{
+  "ethereum_rpc_url" : "http://localhost:8545",
+  "smart_contract_address" : "0x3883f5e181fccaf8410fa61e12b59bad963fb645",
+  "genesis_height" : 4728491
+  "expected_total_supply" : 1000000000000000000000000000
+}
 ```
 
-On a machine with a fully-synced Geth node, run the following command to extract the balance of all the Theta ERC20 token holders at block height 6958428.
+On a machine with a fully-synced Geth node, run the following command to extract the balance of all the ERC20 token holders at block height 6958428, and save the result to `./balance.json`
 
 ```
-python run.py http://localhost:8545 0x3883f5e181fccaf8410fa61e12b59bad963fb645 4728491 6958428 balance.json
+python run.py config.json 6958428 balance.json
 ```
+

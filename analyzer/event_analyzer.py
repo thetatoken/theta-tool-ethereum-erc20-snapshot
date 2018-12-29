@@ -16,7 +16,7 @@ class EthereumEventAnalyzer:
   def __init__(self):
     pass
 
-  def Analyze(self, event_file_folder, balance_file_path):
+  def Analyze(self, event_file_folder, target_height):
     balance_map = {}
     event_file_regex = re.compile(EthereumEventExtractor.FILENAME_REGEX)
     filenames = [f for f in listdir(event_file_folder) if event_file_regex.search(f)]
@@ -24,21 +24,25 @@ class EthereumEventAnalyzer:
       match_res = event_file_regex.match(filename)
       if match_res:
         file_path = event_file_folder + '/' + filename
-        self.analyzeFile(file_path, balance_map)
+        self.analyzeFile(file_path, target_height, balance_map)
     balance_map = self.filterOutAddressesWithZeroBalance(balance_map)
     balance_map = self.convertBalanceToString(balance_map)
-    self.exportBalance(balance_map, balance_file_path)
+    return balance_map
 
-  def analyzeFile(self, file_path, balance_map):
+  def analyzeFile(self, file_path, target_height, balance_map):
     with open(file_path) as f:
       data = json.load(f)
     for event_json in data:
+      block_height = int(self.getBlockHeight(event_json), 16)
+      if block_height > target_height:
+        break
+
       from_addr, to_addr, amount = '', '', 0
       event_topic = self.getEventTopic(event_json)
       if event_topic == EthereumEventAnalyzer.TRANSFER_TOPIC:
         from_addr, to_addr, amount = self.analyzeTransferEvent(event_json)
       elif event_topic == EthereumEventAnalyzer.APPROVAL_TOPIC:
-        from_addr, to_addr = self.analyzeApprovalEvent(event_json) # approve transfers ZERO token
+        from_addr, to_addr = self.analyzeApprovalEvent(event_json) # approve() transfers ZERO token
       
       if (len(from_addr) == 0) or (len(to_addr) == 0):
         Logger.printWarning('failed to process event: %s'%(event_json))
@@ -58,6 +62,13 @@ class EthereumEventAnalyzer:
       updated_to_balance = to_balance + amount
       balance_map[from_addr] = updated_from_balance
       balance_map[to_addr] = updated_to_balance
+
+  def getBlockHeight(self, event_json):
+    block_height = event_json.get(ApiKey.BLOCK_NUMBER, -1)
+    if block_height < 0:
+      Logger.printError('Cannot extract block number: %s'%(event_json))
+      exit(1)
+    return block_height
 
   def getEventTopic(self, event_json):
     topics = event_json.get(ApiKey.TOPICS, None)
@@ -85,11 +96,7 @@ class EthereumEventAnalyzer:
     from_addr = self.extractAddressFromTopic(topics[1])
     to_addr = self.extractAddressFromTopic(topics[2])
     return from_addr, to_addr
-
-  def exportBalance(self, balance_map, balance_file_path):
-    with open(balance_file_path, 'w') as balance_file:
-      json.dump(balance_map, balance_file, indent=2)
-  
+ 
   def extractAddressFromTopic(self, topic):
     addr = '0x' + topic[26:]
     return addr

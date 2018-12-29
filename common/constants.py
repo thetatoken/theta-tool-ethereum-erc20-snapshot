@@ -20,13 +20,18 @@ class ApiKey:
   FROM_BLOCK = 'fromBlock'
   TO_BLOCK   = 'toBlock'
   ADDRESS    = 'address'
+  BLOCK_NUMBER = 'blockNumber'
 
   TOPICS     = 'topics'
   DATA       = 'data'
+  FROM       = 'from'
+  TO         = 'to'
 
 
 class ApiValue:
+  JSONRPC_VERSION = '2.0'
   ETH_GETLOGS = 'eth_getLogs'
+  ETH_CALL    = 'eth_call'
 
 
 class ApiErrorCode:

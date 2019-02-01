@@ -34,3 +34,8 @@ On a machine with a fully-synced Geth node, run the following command to extract
 python run.py config.json 6958428 balance.json
 ```
 
+**Note 1**: On an Ethereum node that does not keep the entire history trie, we need to supply with the latest block height (can get from etherscan.io). Otherwise the script might error out.
+
+**Note 2**: Before running the script, it is better to restart the Ethereum node to reclaim some memory. Otherwise the script might stuck as the Ethereum node could consume all of the available memory during the sanpshot export. 
+
+
